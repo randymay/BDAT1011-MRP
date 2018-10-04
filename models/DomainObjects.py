@@ -1,0 +1,9 @@
+class BusinessAddress(object) :
+    name = ""
+    streetAddress1 = ""
+    streetAddress2 = ""
+    city = ""
+    country = ""
+    postalCode = ""
+    latitude = 0.0
+    longitude = 0.0
