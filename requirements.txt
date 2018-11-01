@@ -1,2 +1,4 @@
 Flask==1.0.2
 flask_googlemaps==0.2.6
+pandas==0.23.0
+xlrd==1.1.0
