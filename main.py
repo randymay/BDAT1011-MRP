@@ -13,11 +13,12 @@
 # limitations under the License.
 
 # [START gae_python37_app]
+import pandas as pd
 from flask import Flask, render_template
 import csv
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
-from models.DomainObjects import BusinessAddress
+from models.DomainObjects import BusinessInfo
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
@@ -27,7 +28,27 @@ app = Flask(__name__)
 GoogleMaps(app, key="AIzaSyDxbiiwUGoMt8g91FANvlRC80wc3Ox0XOA")
 
 
-def createMarkers(businesses):
+def createMarkers(data):
+    businesses = []
+    for index, row in data.iterrows():
+        business = BusinessInfo()
+        												
+        business.name = row['Name']
+        business.address = row['Address']
+        business.city = row['City']
+        business.province = row['Province']
+        business.latitude = row['Latitude']
+        business.longitude = row['Longitude']
+        business.website = row['Website']
+        business.emailAddress = row['Email']
+        business.phoneNumber = row['Phone']
+        business.classification = row['Class']
+        business.benefit = row['Benefit']
+        business.imageUrl = row['Image URL']
+        business.memberSince = row['Member Since']
+
+        businesses.append(business)
+        
     markers = []
     for business in businesses:
         markers.append(createMarker(business))
@@ -40,56 +61,94 @@ def createMarker(business):
         'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
         'lat': business.latitude,
         'lng': business.longitude,
-        'infobox': "<b>%s</b><br></br>" % (business.name)
+        'infobox': createInfoBox(business)
     }
     return marker
 
+def createInfoBox(business):
+    # infoBox = "<b>Yo! %s</b><br></br>" % (business.name)
+
+    #infoBox = '<div class="container">'
+    # infoBox = '<div class="col-xs-12 col-sm-12 col-md-12">'
+    infoBox = '<div class="well well-sm">'
+    infoBox += '<div class="row">'
+    # infoBox += '<div class="col-xs-6 col-sm-6 col-md-6">'
+    # infoBox += '<img src="%s" alt="" class="info-box-img img-rounded img-responsive">' % (business.imageUrl)
+    # infoBox += '</div>'
+    infoBox += '<div class="col-xs-12 col-sm-12 col-md-12">'
+    if business.name != "":
+        infoBox += '<h4>%s</h4>' % (business.name)
+    if business.address != "":
+        infoBox += '<small>%s, %s, %s <i class="glyphicon glyphicon-map-marker"></i></small>' % (business.address, business.city, business.province)
+    infoBox += '<p>'
+    if business.emailAddress != "":
+        infoBox += '<i class="glyphicon glyphicon-envelope"></i><a href="mailto:%s">%s</a>' % (business.emailAddress, business.emailAddress)
+        infoBox += '<br>'
+    if business.website != "":
+        infoBox += '<i class="glyphicon glyphicon-globe"></i><a href="http://%s" target="_blank">%s</a>' % (business.website, business.website)
+        infoBox += '<br>'
+    if business.phoneNumber != "":
+        infoBox += '<i class="glyphicon glyphicon-phone"></i>%s' % (business.phoneNumber)
+        infoBox += '<br>'
+    if business.memberSince != "":
+        infoBox += '<i class="glyphicon glyphicon-calendar"></i>Member since:%s' % (business.memberSince)
+        infoBox += '<br>'
+    if business.benefit != "":
+        infoBox += '<i class="glyphicon glyphicon-tags"></i>Benefits:'
+        infoBox += '<br>'
+        infoBox += business.benefit
+    infoBox += '</p></div>'
+    infoBox += '</div>'
+    infoBox += '</div>'
+    #infoBox += '</div>' 
+
+    return infoBox
 
 @app.route('/')
 def hello():
 
-    businesses = []
+    data = pd.read_excel("data.xlsx", sheet_name='data', header=0)
+    print(data.head())
+
+    """ businesses = []
     dataFile = open('data.csv', 'r')
 
     with open('data.csv', newline='') as csvfile:
-        csvreader = csv.reader(csvfile, delimiter=',')
-        for row in csvreader:
+        csvReader = csv.reader(csvfile, delimiter=',')
+        # Skip the first row
+        next(csvReader, None)
+        for row in csvReader:
             print(row)
 
-            business = BusinessAddress()
+            business = BusinessInfo()
             business.name = row[0]
-            business.streetAddress1 = row[1]
-            business.latitude = row[7]
-            business.longitude = row[8]
+            business.address = row[1]
+            business.city = row[2]
+            business.province = row[3]
+            business.latitude = row[4]
+            business.longitude = row[5]
+            business.website = row[6]
+            business.emailAddress = row[7]
+            business.phoneNumber = row[8]
+            business.classification = row[9]
+            business.benefit = row[10]
+            business.imageUrl = row[11]
+            business.memberSince = row[12]
 
             businesses.append(business)
 
-    dataFile.close
+    dataFile.close """
 
     # print(businesses)
-    markers = createMarkers(businesses)
+    markers = createMarkers(data)
     # print(markers)
 
     fullMap = Map(
-        zoom=11,
+        zoom=12,
         identifier="fullMap",
         lat=44.3872894,
         lng=-79.6943205,
         markers=markers
-        # markers=[
-        #    {
-        #        'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-        #        'lat': 37.4419,
-        #        'lng': -122.1419,
-        #        'infobox': "<b>Hello World</b>"
-        #    },
-        #    {
-        #        'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-        #        'lat': 37.4300,
-        #        'lng': -122.1400,
-        #        'infobox': "<b>Hello World from other place</b>"
-        #    }
-        # ]
     )
     return render_template('map.html', fullMap=fullMap)
 

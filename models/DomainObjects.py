@@ -1,9 +1,14 @@
-class BusinessAddress(object) :
+class BusinessInfo(object) :
     name = ""
-    streetAddress1 = ""
-    streetAddress2 = ""
+    address = ""
     city = ""
-    country = ""
-    postalCode = ""
+    province = ""
     latitude = 0.0
     longitude = 0.0
+    website = ""
+    emailAddress = ""
+    phoneNumber = ""
+    classification = ""
+    benefit = ""
+    imageUrl = ""
+    memberSince = "" 

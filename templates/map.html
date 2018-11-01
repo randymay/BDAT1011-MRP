@@ -1,13 +1,61 @@
 <!DOCTYPE html>
-    <html>
-    <head>
-            {{fullMap.js}}
-    </head>
-    <body>
+<html>
+
+<head>
+    {{fullMap.js}}
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <style>
+        #fullMap {
+            height: 100%;
+            width: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;    
+        }
+
+        #menu {
+            position: absolute;
+            top: 80px;
+            left: 10px;
+        }
+
+        .glyphicon {  margin-bottom: 10px;margin-right: 10px;}
+
+        small {
+            display: block;
+            line-height: 1.428571429;
+            color: #999;
+        }
+
+        .info-box-img {
+            max-width: 100% !important;
+            height: 220px;
+            width: 270px;
+        }
+
+        .well {
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    {{fullMap.html}}
+
+    <!-- <div id="menu">
         <h1>Barrie Chamber of Commerce</h1>
         <h2>Currently Active Members</h2>
-        <!-- <h3>This is the Full Map</h3> -->
-        {{fullMap.html}}
+        <h3>Header 3</h3>
+        <h4>Header 4</h4>
+    </div> -->
 
-    </body>
+    <script type="javascript">
+
+    </script>
+</body>
+
 </html>
