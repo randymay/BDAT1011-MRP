@@ -66,15 +66,8 @@ def createMarker(business):
     return marker
 
 def createInfoBox(business):
-    # infoBox = "<b>Yo! %s</b><br></br>" % (business.name)
-
-    #infoBox = '<div class="container">'
-    # infoBox = '<div class="col-xs-12 col-sm-12 col-md-12">'
     infoBox = '<div class="well well-sm">'
     infoBox += '<div class="row">'
-    # infoBox += '<div class="col-xs-6 col-sm-6 col-md-6">'
-    # infoBox += '<img src="%s" alt="" class="info-box-img img-rounded img-responsive">' % (business.imageUrl)
-    # infoBox += '</div>'
     infoBox += '<div class="col-xs-12 col-sm-12 col-md-12">'
     if business.name != "":
         infoBox += '<h4>%s</h4>' % (business.name)
@@ -100,7 +93,6 @@ def createInfoBox(business):
     infoBox += '</p></div>'
     infoBox += '</div>'
     infoBox += '</div>'
-    #infoBox += '</div>' 
 
     return infoBox
 
@@ -131,8 +123,11 @@ def hello():
         markers=markers
     )
 
-    availableTags = ["Custom Software Development", "Custom Object 1", "Custom Object 1"]
-    return render_template('map.html', fullMap=fullMap, availableTags=availableTags)
+    # availableTags = ["Custom Software Development", "Custom Object 1", "Custom Object 1"]
+    availableTagsData = pd.read_excel("categories.xlsx", sheet_name='Sheet1', header=0)
+    print(availableTagsData.head())
+
+    return render_template('map.html', fullMap=fullMap, availableTags=availableTagsData['Category Name'].values.tolist())
 
 
 if __name__ == '__main__':
