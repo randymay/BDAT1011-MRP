@@ -14,7 +14,7 @@
 
 # [START gae_python37_app]
 import pandas as pd
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import csv
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
@@ -107,37 +107,17 @@ def createInfoBox(business):
 @app.route('/')
 def hello():
 
+    q = request.args.get('q')
+    print(q)
+
     data = pd.read_excel("data.xlsx", sheet_name='data', header=0)
     print(data.head())
 
-    """ businesses = []
-    dataFile = open('data.csv', 'r')
-
-    with open('data.csv', newline='') as csvfile:
-        csvReader = csv.reader(csvfile, delimiter=',')
-        # Skip the first row
-        next(csvReader, None)
-        for row in csvReader:
-            print(row)
-
-            business = BusinessInfo()
-            business.name = row[0]
-            business.address = row[1]
-            business.city = row[2]
-            business.province = row[3]
-            business.latitude = row[4]
-            business.longitude = row[5]
-            business.website = row[6]
-            business.emailAddress = row[7]
-            business.phoneNumber = row[8]
-            business.classification = row[9]
-            business.benefit = row[10]
-            business.imageUrl = row[11]
-            business.memberSince = row[12]
-
-            businesses.append(business)
-
-    dataFile.close """
+    if q:
+        if q.strip():
+            # Filter data frame for category search
+            print('Filter')
+            data = data.loc[data['Class'] == q]
 
     # print(businesses)
     markers = createMarkers(data)
@@ -150,7 +130,9 @@ def hello():
         lng=-79.6943205,
         markers=markers
     )
-    return render_template('map.html', fullMap=fullMap)
+
+    availableTags = ["Custom Software Development", "Custom Object 1", "Custom Object 1"]
+    return render_template('map.html', fullMap=fullMap, availableTags=availableTags)
 
 
 if __name__ == '__main__':
