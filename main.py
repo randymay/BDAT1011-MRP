@@ -1,18 +1,3 @@
-# Copyright 2018 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# [START gae_python37_app]
 import pandas as pd
 from flask import Flask, render_template, request
 import csv
@@ -101,26 +86,20 @@ def hello():
 
     n = request.args.get('n')
     q = request.args.get('q')
-    # print(q)
 
     data = pd.read_excel("data.xlsx", sheet_name='data', header=0)
-    # print(data.head())
 
     if q:
         if q.strip():
             # Filter data frame for category search
-            # print('Filter')
             data = data.loc[data['Class'] == q]
 
     if n:
         if n.strip():
             # Filter data frame for business name search
-            # print('Filter')
             data = data.loc[data['Name'].str.contains(n, case=False)]
 
-    # print(businesses)
     markers = createMarkers(data)
-    # print(markers)
 
     fullMap = Map(
         zoom=12,
@@ -130,9 +109,7 @@ def hello():
         markers=markers
     )
 
-    # availableTags = ["Custom Software Development", "Custom Object 1", "Custom Object 1"]
     availableTagsData = pd.read_excel("categories.xlsx", sheet_name='Sheet1', header=0)
-    # print(availableTagsData.head())
 
     return render_template('map.html', fullMap=fullMap, availableTags=availableTagsData['Category Name'].values.tolist())
 
