@@ -99,17 +99,24 @@ def createInfoBox(business):
 @app.route('/')
 def hello():
 
+    n = request.args.get('n')
     q = request.args.get('q')
-    print(q)
+    # print(q)
 
     data = pd.read_excel("data.xlsx", sheet_name='data', header=0)
-    print(data.head())
+    # print(data.head())
 
     if q:
         if q.strip():
             # Filter data frame for category search
-            print('Filter')
+            # print('Filter')
             data = data.loc[data['Class'] == q]
+
+    if n:
+        if n.strip():
+            # Filter data frame for business name search
+            # print('Filter')
+            data = data.loc[data['Name'].str.contains(n, case=False)]
 
     # print(businesses)
     markers = createMarkers(data)
@@ -125,7 +132,7 @@ def hello():
 
     # availableTags = ["Custom Software Development", "Custom Object 1", "Custom Object 1"]
     availableTagsData = pd.read_excel("categories.xlsx", sheet_name='Sheet1', header=0)
-    print(availableTagsData.head())
+    # print(availableTagsData.head())
 
     return render_template('map.html', fullMap=fullMap, availableTags=availableTagsData['Category Name'].values.tolist())
 

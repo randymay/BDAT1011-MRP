@@ -97,6 +97,7 @@
                 <div class="collapse navbar-collapse">
                     <form id='classForm' class="navbar-form navbar-right" method="get">
                         <div class="form-group">
+                            <input id="nameSearch" name="n" type="text" class="form-control input" placeholder="Business Name Search">
                             <input id="classes" name="q" type="text" class="form-control input" placeholder="Classification Search">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -125,6 +126,7 @@
 
         $('#clearBtn').click(function () {
             $('#classes').val('');
+            $('#nameSearch').val('');
             $('#classForm').submit();
         });
     </script>
