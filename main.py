@@ -4,6 +4,7 @@ import csv
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
 from models.DomainObjects import BusinessInfo
+import math
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
@@ -62,7 +63,7 @@ def createInfoBox(business):
     if business.emailAddress != "":
         infoBox += '<i class="glyphicon glyphicon-envelope"></i><a href="mailto:%s">%s</a>' % (business.emailAddress, business.emailAddress)
         infoBox += '<br>'
-    if business.website != "":
+    if business.website != "" and math.isnan(business.website) == False:
         infoBox += '<i class="glyphicon glyphicon-globe"></i><a href="http://%s" target="_blank">%s</a>' % (business.website, business.website)
         infoBox += '<br>'
     if business.phoneNumber != "":
@@ -71,10 +72,10 @@ def createInfoBox(business):
     if business.memberSince != "":
         infoBox += '<i class="glyphicon glyphicon-calendar"></i>Member since:%s' % (business.memberSince)
         infoBox += '<br>'
-    if business.benefit != "":
-        infoBox += '<i class="glyphicon glyphicon-tags"></i>Benefits:'
-        infoBox += '<br>'
-        infoBox += business.benefit
+    if business.benefit != "" and math.isnan(business.benefit) == False:
+         infoBox += '<i class="glyphicon glyphicon-tags"></i>Benefits:'
+         infoBox += '<br>'
+         infoBox += business.benefit
     infoBox += '</p></div>'
     infoBox += '</div>'
     infoBox += '</div>'
