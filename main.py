@@ -112,7 +112,7 @@ def hello():
 
     availableTagsData = pd.read_excel("categories.xlsx", sheet_name='Sheet1', header=0)
 
-    return render_template('map.html', fullMap=fullMap, availableTags=availableTagsData['Category Name'].values.tolist())
+    return render_template('map.html', fullMap=fullMap, availableTags=availableTagsData['Category Name'].values.tolist(), selectedClass=q, nameText=n)
 
 
 if __name__ == '__main__':

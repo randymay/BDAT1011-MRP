@@ -78,6 +78,10 @@
         .ui-helper-hidden-accessible {
         display: none;
         }
+        .glyphicon {
+            margin-right: 0px;
+            margin-bottom: 0px;
+        }
     </style>
 </head>
 
@@ -95,10 +99,11 @@
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse">
-                    <form id='classForm' class="navbar-form navbar-right" method="get">
+                    <form id='classForm' class="navbar-form navbar-right form-inline" method="get">
                         <div class="form-group">
                             <input id="nameSearch" name="n" type="text" class="form-control input" placeholder="Business Name Search">
-                            <input id="classes" name="q" type="text" class="form-control input" placeholder="Classification Search">
+                            <!-- <input id="classes" name="q" type="text" class="form-control input" placeholder="Classification Search"> -->
+                            <select id="classes" name="q" class="form-control"></select>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                         <button id="clearBtn" type="button" class="btn btn-default">Clear</button>
@@ -114,12 +119,25 @@
     <script>
         $(function () {
             var availableTags = eval("{{ availableTags|safe }}");
-            console.log(availableTags);
-            $("#classes").autocomplete({
-                source: availableTags,
-                select: function (event, ui) {
-                    $(this).val(ui.item.value);
-                    $(this).parents("form").submit();
+            // console.log(availableTags);
+
+            var nameText = '{{ nameText }}';
+            // console.log(nameText);
+            $('#nameSearch').val(nameText);
+
+            var selectedClass = '{{ selectedClass }}';
+            //console.log('Selected Class: ' + selectedClass);
+
+            var select = $('#classes');
+            if (!selectedClass || selectedClass == 'None') {
+                console.log('No class selected.');
+                select.append('<option value="Classification Search" selected disabled hidden>Classification Search</option>');
+            }
+            $.each(availableTags, function (val, text) {
+                if (text == selectedClass) {
+                    select.append('<option selected value="' + text + '">' + text + '</option>');
+                } else {
+                    select.append('<option value="' + text + '">' + text + '</option>');
                 }
             });
         });
