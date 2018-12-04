@@ -5,6 +5,7 @@ from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
 from models.DomainObjects import BusinessInfo
 import math
+from datetime import datetime
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
@@ -32,6 +33,8 @@ def createMarkers(data):
         business.benefit = row['Benefit']
         business.imageUrl = row['Image URL']
         business.memberSince = row['Member Since']
+        if pd.notnull(business.memberSince) and isinstance(business.memberSince, datetime):
+            business.memberSince = business.memberSince.strftime("%B %d, %Y")
 
         businesses.append(business)
         
@@ -61,23 +64,23 @@ def createInfoBox(business):
         infoBox += '<small>%s, %s, %s <i class="glyphicon glyphicon-map-marker"></i></small>' % (business.address, business.city, business.province)
     infoBox += '<p>'
     if business.emailAddress != "":
-        infoBox += '<i class="glyphicon glyphicon-envelope"></i><a href="mailto:%s">%s</a>' % (business.emailAddress, business.emailAddress)
+        infoBox += '<i class="glyphicon glyphicon-envelope"></i><a href="mailto:%s"> %s</a>' % (business.emailAddress, business.emailAddress)
         infoBox += '<br>'
     if business.website != "" and math.isnan(business.website) == False:
         infoBox += '<i class="glyphicon glyphicon-globe"></i><a href="http://%s" target="_blank">%s</a>' % (business.website, business.website)
         infoBox += '<br>'
     if business.phoneNumber != "":
-        infoBox += '<i class="glyphicon glyphicon-phone"></i>%s' % (business.phoneNumber)
+        infoBox += '<i class="glyphicon glyphicon-phone"></i> %s' % (business.phoneNumber)
         infoBox += '<br>'
     if business.memberSince != "":
-        infoBox += '<i class="glyphicon glyphicon-calendar"></i>Member since:%s' % (business.memberSince)
+        infoBox += '<i class="glyphicon glyphicon-calendar"></i>  Member since: %s' % (business.memberSince)
         infoBox += '<br>'
     if business.benefit != "" and math.isnan(business.benefit) == False:
-         infoBox += '<i class="glyphicon glyphicon-tags"></i>Benefits:'
+         infoBox += '<i class="glyphicon glyphicon-tags"></i> Benefits:'
          infoBox += '<br>'
          infoBox += business.benefit
     if business.classification != "":
-         infoBox += '<i class="glyphicon glyphicon-equalizer"></i>Class:'
+         infoBox += '<i class="glyphicon glyphicon-equalizer"></i> Class: '
          infoBox += business.classification
          infoBox += '<br>'
 
