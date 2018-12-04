@@ -28,7 +28,7 @@ def createMarkers(data):
         business.website = row['Website']
         business.emailAddress = row['Email']
         business.phoneNumber = row['Phone']
-        business.classification = row['Class']
+        business.classification = str(row['Class'])
         business.benefit = row['Benefit']
         business.imageUrl = row['Image URL']
         business.memberSince = row['Member Since']
@@ -76,6 +76,11 @@ def createInfoBox(business):
          infoBox += '<i class="glyphicon glyphicon-tags"></i>Benefits:'
          infoBox += '<br>'
          infoBox += business.benefit
+    if business.classification != "":
+         infoBox += '<i class="glyphicon glyphicon-equalizer"></i>Class:'
+         infoBox += business.classification
+         infoBox += '<br>'
+
     infoBox += '</p></div>'
     infoBox += '</div>'
     infoBox += '</div>'
@@ -89,7 +94,8 @@ def hello():
     q = request.args.get('q')
 
     data = pd.read_excel("data.xlsx", sheet_name='data', header=0)
-
+    # data = data.dropna(subset=['Name']) 
+    
     if q:
         if q.strip():
             # Filter data frame for category search

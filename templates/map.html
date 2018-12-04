@@ -123,7 +123,9 @@
 
             var nameText = '{{ nameText }}';
             // console.log(nameText);
-            $('#nameSearch').val(nameText);
+            if (nameText && nameText != 'None') {
+                $('#nameSearch').val(nameText);
+            }
 
             var selectedClass = '{{ selectedClass }}';
             //console.log('Selected Class: ' + selectedClass);
